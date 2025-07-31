@@ -12,11 +12,12 @@ def play_russian_roulette(player1_name, player2_name, action, game_state=None):
         output = f"Welcome, {players[0]} and {players[1]}! Let's play Russian Roulette.\n"
         game_over = False
         players_status = {player1_name: "alive", player2_name: "alive"}
+        # skip_counts = {player1_name: 0, player2_name: 0} # Track consecutive skips - Removed skip functionality
     else:
-        players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status = game_state
+        players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status = game_state # Removed skip_counts from state
 
     if game_over:
-        return output, (players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status)
+        return output, (players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status) # Removed skip_counts from state
 
     current_player = players[current_player_index]
     opponent_player = players[1 - current_player_index]
@@ -25,6 +26,7 @@ def play_russian_roulette(player1_name, player2_name, action, game_state=None):
     output += f"Action chosen: {action}\n"
 
     if action == "Shoot Self":
+        # skip_counts[current_player] = 0 # Reset skip count - Removed skip functionality
         output += f"{current_player} bravely points the gun at themselves and pulls the trigger...\n"
         if current_chamber == bullet_chamber:
             output += f"\n💥 BANG! The bullet was in chamber {bullet_chamber}! {current_player} is out!\n"
@@ -36,6 +38,7 @@ def play_russian_roulette(player1_name, player2_name, action, game_state=None):
             current_player_index = 1 - current_player_index # Switch player
 
     elif action == "Shoot Opponent":
+        # skip_counts[current_player] = 0 # Reset skip count - Removed skip functionality
         output += f"{current_player} points the gun at {opponent_player} and pulls the trigger...\n"
         if current_chamber == bullet_chamber:
             output += f"\n💥 BANG! The bullet was in chamber {bullet_chamber}! {opponent_player} is out!\n"
@@ -46,13 +49,10 @@ def play_russian_roulette(player1_name, player2_name, action, game_state=None):
             current_chamber += 1
             current_player_index = 1 - current_player_index # Switch player
 
-    elif action == "Skip":
-        output += f"{current_player} decides to skip their turn, passing the gun to {opponent_player}.\n"
-        current_chamber += 1
-        current_player_index = 1 - current_player_index # Switch player
+    # Removed the "Skip" action logic
 
     else:
-        output += "Invalid action. Please choose Shoot Self, Shoot Opponent, or Skip.\n"
+        output += "Invalid action. Please choose Shoot Self or Shoot Opponent.\n" # Updated message
 
     # Ensure chamber wraps around if it exceeds 6
     if current_chamber > 6:
@@ -65,7 +65,7 @@ def play_russian_roulette(player1_name, player2_name, action, game_state=None):
         else:
              output += f"\n--- Game Over ---\nIt's a draw, somehow!\n" # Should not happen in 2 player game
 
-    return output, (players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status)
+    return output, (players, bullet_chamber, current_chamber, current_player_index, output, game_over, players_status) # Removed skip_counts from state
 
 # Create the Gradio interface for Russian Roulette
 with gr.Blocks() as roulette_iface:
@@ -81,7 +81,7 @@ with gr.Blocks() as roulette_iface:
 
     gr.Markdown("## Player Actions")
     with gr.Row():
-        action_radio = gr.Radio(["Shoot Self", "Shoot Opponent", "Skip"], label="Choose your action", value="Shoot Self", interactive=False) # Disable until game starts
+        action_radio = gr.Radio(["Shoot Self", "Shoot Opponent"], label="Choose your action", value="Shoot Self", interactive=False) # Removed "Skip"
         action_button = gr.Button("Perform Action", interactive=False) # Disable until game starts
 
 
