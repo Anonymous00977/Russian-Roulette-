@@ -3,6 +3,8 @@
 A Python-based Russian Roulette simulator using Gradio for interface.  
 
 ---
+If anyone wants to directly play the game, see here:
+https://colab.research.google.com/drive/1XPfo_VyFthh2BFB3lgwpNuDOqD3-YOGb?usp=sharing
 
 ## 🚀 How to Run  
 
